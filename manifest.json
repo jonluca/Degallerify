@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+
+  "name": "Degallerify",
+  "description": "This extension will convert all instances of imgur.com/gallery/ links to direct links",
+  "version": "1.0",
+
+  "browser_action": {
+   "default_icon": "icon.png",
+  },
+  "permissions": [
+   "activeTab"
+   ]
+}
