@@ -1,4 +1,5 @@
 var el = document.getElementsByTagName("a");
-for(var i=0;i<el.length;i++){
-    el[i].href = el[i].href.replace((www\.)?imgur.com\/gallery\/, i\.imgur\.com\/);
+var j = 0;
+for(j=0;j<el.length;j++){
+    el[j].href = el[j].href.replace(/(www\.)?imgur.com\/gallery\//, "i.imgur.com/") + '.jpg';
 }
