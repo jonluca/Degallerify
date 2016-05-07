@@ -19,13 +19,13 @@
     }
   ],
   "icons": {
-    "64": "icon64.png",
-    "32": "icon32.png",
-    "128": "icon128.png"
+    "64": "images/icon64.png",
+    "32": "images/icon32.png",
+    "128": "images/icon128.png"
     },
   "page_action":{
     "default_title": "Degallerify",
-    "default_icon": "icon.png"
+    "default_icon": "images/icon.png"
     },
   "homepage_url": "https://github.com/jonluca/Degallerify/",
   "web_accessible_resources": [
