@@ -7,11 +7,16 @@ var el = document.getElementsByTagName("a");
 var gal = false;
 var singularID = null;
 var ext = null;
+var singLink = false;
 for(var j=0;j<el.length;j++){
 	gal = false;
+	singLink = false;
 	ext = null;
 	singularID = null;
 	if((el[j].href).indexOf("imgur.com/a/") != -1){
+		continue;
+	}
+	if((el[j].href).indexOf("i.imgur.com") != -1){
 		continue;
 	}
 	if((el[j].href).indexOf("imgur.com") != -1){
@@ -36,20 +41,50 @@ for(var j=0;j<el.length;j++){
 							gal = true;
 						} 
 						else{
-							singularID = data.data.imags[0].link;
+							singularID = data.data.link;
 							gal = false;
 						}                 
 					}
 				});
 				if(gal == true){
 					if(singularID == null){
-						el[j].href = el[j].href.replace(/(http:\/\/)?(www\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
+						el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
 					}else{
-						el[j].href = el[j].href.replace(/(http:\/\/)?(www\.)?imgur.com\/gallery\/.*/, singularID);					}
-				}else{
-					el[j].href = el[j].href.replace(/(http:\/\/)?(www\.)?imgur.com\/gallery\/.*/, singularID);
+						el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, singularID);					}
+					}else{
+						el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, singularID);
+					}
+				}
+				else if(view == 'a'){
+					continue;
+				}
+				else{
+					hash = matches[2];
+					$.ajax({
+						async: false,
+						type: "GET",
+						url: "https://api.imgur.com/3/image/" + hash,
+						dataType: "json",
+						headers:{
+							'Authorization':'Client-ID c606aeeec9ca098'
+						},
+						success: function(data) {
+							if(data.status == '200') {
+								if(data.data.animated == true){
+									singularID = data.data.gifv;
+								}else{
+									singularID = data.data.link;
+								}
+								singLink = true;
+							}else{
+								singLink = false;
+							}                
+						}
+					});
+					if(singLink == true){
+						el[j].href = el[j].href.replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, singularID);
+					}
 				}
 			}
 		}
 	}
-}
