@@ -7,7 +7,6 @@ var el = document.getElementsByTagName("a");
 var singularID = null;
 var view, hash, matches;
 for(var j=0;j<el.length;j++){
-	singularID = null;
 	if((el[j].href).indexOf("imgur.com/a/") != -1 || (el[j].href).indexOf("i.imgur.com") != -1){
 		continue;
 	}
