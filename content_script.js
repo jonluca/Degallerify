@@ -5,8 +5,12 @@
 
 var el = document.getElementsByTagName("a");
 var gal = false;
+var singularID = null;
+var ext = null;
 for(var j=0;j<el.length;j++){
 	gal = false;
+	ext = null;
+	singularID = null;
 	if((el[j].href).indexOf("imgur.com/a/") != -1){
 		continue;
 	}
@@ -26,17 +30,24 @@ for(var j=0;j<el.length;j++){
 					},
 					success: function(data) {
 						if(data.data.is_album == true) {
+							if(data.data.images_count == 1){
+								singularID = data.data.images[0].link;
+							}
 							gal = true;
 						} 
 						else{
+							singularID = data.data.imags[0].link;
 							gal = false;
 						}                 
 					}
 				});
 				if(gal == true){
-					el[j].href = el[j].href.replace(/(http:\/\/)?(www\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
+					if(singularID == null){
+						el[j].href = el[j].href.replace(/(http:\/\/)?(www\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
+					}else{
+						el[j].href = el[j].href.replace(/(http:\/\/)?(www\.)?imgur.com\/gallery\/.*/, singularID);					}
 				}else{
-					el[j].href = el[j].href.replace(/(http:\/\/)?(www\.)?imgur.com\/gallery\//, "https://i.imgur.com/") + '.jpg';
+					el[j].href = el[j].href.replace(/(http:\/\/)?(www\.)?imgur.com\/gallery\/.*/, singularID);
 				}
 			}
 		}
