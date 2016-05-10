@@ -20,31 +20,35 @@ for(var j=0;j<el.length;j++){
 			var view = matches[1];
 			var hash = matches[2];
 			if(view == 'gallery'){
-				$.ajax({
-					type: "GET",
-					url: "https://api.imgur.com/3/gallery/" + hash,
-					dataType: "json",
-					headers:{
-						'Authorization':'Client-ID c606aeeec9ca098'
-					},
-					success: function(data) {
-						if(data.data.is_album == true) {
-							if(data.data.images_count == 1){
-								el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, data.data.images[0].link);
-							}else{
-								el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
-							}
-						} 
-						else{
-							el[j].href = el[j].href.replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, data.data.link);
-						}                 
-					},
-					error: function(data){
-						console.log("Failed to fetch data!");
-						console.log(data);
-					}
-				});
+				ajaxCall(j);
 			}
 		}
 	}
+}
+
+function ajaxCall(j){
+	$.ajax({
+		type: "GET",
+		url: "https://api.imgur.com/3/gallery/" + hash,
+		dataType: "json",
+		headers:{
+			'Authorization':'Client-ID c606aeeec9ca098'
+		},
+		success: function(data) {
+			if(data.data.is_album == true) {
+				if(data.data.images_count == 1){
+					el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, data.data.images[0].link);
+				}else{
+					el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
+				}
+			} 
+			else{
+				el[j].href = el[j].href.replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, data.data.link);
+			}                 
+		},
+		error: function(data){
+			console.log("Failed to fetch data!");
+			console.log(data);
+		}
+	});
 }
