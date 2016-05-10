@@ -27,7 +27,6 @@ for(var j=0;j<el.length;j++){
 					headers:{
 						'Authorization':'Client-ID c606aeeec9ca098'
 					},
-					async: false,
 					success: function(data) {
 						if(data.data.is_album == true) {
 							if(data.data.images_count == 1){
@@ -39,6 +38,10 @@ for(var j=0;j<el.length;j++){
 						else{
 							el[j].href = el[j].href.replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, data.data.link);
 						}                 
+					},
+					error: function(data){
+						console.log("Failed to fetch data!");
+						console.log(data);
 					}
 				});
 			}
