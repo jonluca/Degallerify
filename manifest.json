@@ -3,7 +3,7 @@
 
   "name": "Degallerify",
   "description": "This extension will convert all instances of imgur.com/gallery/ links to direct links",
-  "version": "1.3.1",
+  "version": "1.4",
   "background":{
     "scripts": ["js/background.js","js/jquery-2.1.1.min.js"]
   },
