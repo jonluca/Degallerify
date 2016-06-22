@@ -12,43 +12,54 @@ for(var j=0;j<el.length;j++){
 	ext = null;
 	singularID = null;
 	if((el[j].href).indexOf("imgur.com/a/") != -1){
-		continue;
+		var matches = el[j].href.match(/(?:\/(a|gallery|signin))?\/([^\W_]{5,8})(?:\/|\.[a-zA-Z]+|#([^\W_]{5,8}|\d+))?(\/new|\/all|\?\d*)?$/);
+		if(matches && matches[2]){
+			var hash = matches[2];
+			ajaxCall(j,'a');
+		}
 	}
-	if((el[j].href).indexOf("imgur.com") != -1){
+	else if((el[j].href).indexOf("imgur.com") != -1){
 		var matches = el[j].href.match(/(?:\/(a|gallery|signin))?\/([^\W_]{5,8})(?:\/|\.[a-zA-Z]+|#([^\W_]{5,8}|\d+))?(\/new|\/all|\?\d*)?$/);
 		if(matches && matches[2]){
 			var view = matches[1];
 			var hash = matches[2];
 			if(view == 'gallery'){
-				ajaxCall(j);
+				ajaxCall(j,'g');
 			}
 		}
 	}
 }
 
-function ajaxCall(j){
-	$.ajax({
-		type: "GET",
-		url: "https://api.imgur.com/3/gallery/" + hash,
-		dataType: "json",
-		headers:{
-			'Authorization':'Client-ID c606aeeec9ca098'
-		},
-		success: function(data) {
-			if(data.data.is_album == true) {
-				if(data.data.images_count == 1){
-					el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, data.data.images[0].link);
-				}else{
-					el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
-				}
-			} 
-			else{
-				el[j].href = el[j].href.replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, data.data.link);
-			}                 
-		},
-		error: function(data){
-			console.log("Failed to fetch data!");
-			console.log(data);
-		}
-	});
+function ajaxCall(j,in2){
+	var urlHash;
+	if(in2 === 'g'){
+		urlHash = "https://api.imgur.com/3/gallery/" + hash;
+	}
+	else{
+		urlHash = "https://api.imgur.com/3/album/" + hash;
+	}
+		$.ajax({
+			type: "GET",
+			url: urlHash,
+			dataType: "json",
+			headers:{
+				'Authorization':'Client-ID c606aeeec9ca098'
+			},
+			success: function(data) {
+				if(data.data.is_album == true) {
+					if(data.data.images_count == 1){
+						el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, data.data.images[0].link);
+					}else{
+						el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
+					}
+				} 
+				else{
+					el[j].href = el[j].href.replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, data.data.link);
+				}                 
+			},
+			error: function(data){
+				console.log("Failed to fetch data!");
+				console.log(data);
+			}
+		});
 }
