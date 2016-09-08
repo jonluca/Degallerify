@@ -19,6 +19,7 @@ for(var j=0;j<el.length;j++){
 		}
 	}
 	else if((el[j].href).indexOf("imgur.com") != -1){
+		console.log(j);
 		var matches = el[j].href.match(/(?:\/(a|gallery|signin))?\/([^\W_]{5,8})(?:\/|\.[a-zA-Z]+|#([^\W_]{5,8}|\d+))?(\/new|\/all|\?\d*)?$/);
 		if(matches && matches[2]){
 			var view = matches[1];
@@ -48,13 +49,19 @@ function ajaxCall(j,in2){
 			success: function(data) {
 				if(data.data.is_album == true) {
 					if(data.data.images_count == 1){
-						el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, data.data.images[0].link);
+						var temp = el[j];
+						temp.setAttribute("data-href-url",temp.getAttribute("data-href-url").replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, data.data.images[0].link));
+						//el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, data.data.images[0].link);
 					}else{
-						el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
+						var temp = el[j];
+						temp.setAttribute("data-href-url",temp.getAttribute("data-href-url").replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/"));
+						//el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
 					}
 				} 
 				else{
-					el[j].href = el[j].href.replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, data.data.link);
+					var temp = el[j];
+					temp.setAttribute("data-href-url",temp.getAttribute("data-href-url").replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, data.data.link));
+					//el[j].href = el[j].href.replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, data.data.link);
 				}                 
 			},
 			error: function(data){
