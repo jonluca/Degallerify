@@ -55,7 +55,8 @@ for(var j=0;j<el.length;j++){
 							}else{
 								singularID = data.data.link;
 							}
-							el[j].href = el[j].href.replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, singularID);
+							var temp = el[j];
+							temp.setAttribute("data-href-url",temp.getAttribute("data-href-url").replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, singularID));
 						}              
 					}
 				});

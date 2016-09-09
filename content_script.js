@@ -8,6 +8,9 @@ var gal = false;
 var singularID = null;
 var ext = null;
 for(var j=0;j<el.length;j++){
+	if((el[j].href).indexOf("imgur.com/a/") != -1 || (el[j].href).indexOf("i.imgur.com") != -1){
+		continue;
+	}
 	gal = false;
 	ext = null;
 	singularID = null;
@@ -19,13 +22,15 @@ for(var j=0;j<el.length;j++){
 		}
 	}
 	else if((el[j].href).indexOf("imgur.com") != -1){
-		console.log(j);
 		var matches = el[j].href.match(/(?:\/(a|gallery|signin))?\/([^\W_]{5,8})(?:\/|\.[a-zA-Z]+|#([^\W_]{5,8}|\d+))?(\/new|\/all|\?\d*)?$/);
 		if(matches && matches[2]){
 			var view = matches[1];
 			var hash = matches[2];
 			if(view == 'gallery'){
 				ajaxCall(j,'g');
+			}
+			else if(view == null){
+				ajaxCall(j,'i');
 			}
 		}
 	}
@@ -36,8 +41,11 @@ function ajaxCall(j,in2){
 	if(in2 === 'g'){
 		urlHash = "https://api.imgur.com/3/gallery/" + hash;
 	}
-	else{
+	else if(in2 === 'a') {
 		urlHash = "https://api.imgur.com/3/album/" + hash;
+	}
+	else{
+		urlHash = "https://api.imgur.com/3/image/" + hash;
 	}
 		$.ajax({
 			type: "GET",
@@ -59,10 +67,16 @@ function ajaxCall(j,in2){
 					}
 				} 
 				else{
+					if(data.data.animated == true){
+						singularID = data.data.gifv;
+					}else{
+						singularID = data.data.link;
+					}
 					var temp = el[j];
-					temp.setAttribute("data-href-url",temp.getAttribute("data-href-url").replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, data.data.link));
-					//el[j].href = el[j].href.replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, data.data.link);
-				}                 
+					temp.setAttribute("data-href-url",temp.getAttribute("data-href-url").replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, singularID));
+				}
+				temp.setAttribute("data-outbound-url",temp.getAttribute("data-href-url"));
+
 			},
 			error: function(data){
 				console.log("Failed to fetch data!");
