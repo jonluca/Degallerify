@@ -7,13 +7,19 @@ var el = document.getElementsByTagName("a");
 var singularID = null;
 var view, hash, matches;
 for(var j=0;j<el.length;j++){
+	//If the href link points to imgur.com/a/ or i.imgur.com, skip the code. These are already links we want
 	if((el[j].href).indexOf("imgur.com/a/") != -1 || (el[j].href).indexOf("i.imgur.com") != -1){
 		continue;
 	}
+	//IF it's a valid imgur link (which we want to modify) lets move forward
 	if((el[j].href).indexOf("imgur.com") != -1){
+		//Matches just matches any possible way of creating an imgur URL, and puts it in two vars, view and hash. The regex just matches any valid url, with or without slashes or www, etc
+		//View will be whether it's an album, a gallery, or another imgur link (for instance, if you're on imgur.com you don't want it to replace every link on the page as some wont be images)
 		matches = el[j].href.match(/(?:\/(a|gallery|signin))?\/([^\W_]{5,8})(?:\/|\.[a-zA-Z]+|#([^\W_]{5,8}|\d+))?(\/new|\/all|\?\d*)?$/);
 		if(matches && matches[2]){
+			//view - a, gallery, signing
 			view = matches[1];
+			//hash - the hash of the image, or the actual link part
 			hash = matches[2];
 			if(view == 'gallery'){
 				$.ajax({
@@ -27,12 +33,15 @@ for(var j=0;j<el.length;j++){
 					success: function(data) {
 						if(data.data.is_album == true) {
 							if(data.data.images_count == 1){
+								//replace URL with direct image url provided from API, if the album has only 1 picture
 								el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, data.data.images[0].link);
 							}else{
+								//Replace URL with album url provided from API
 								el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
 							}
 						} 
 						else{
+							//replace URL with direct image url provided from API
 							el[j].href = el[j].href.replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, data.data.link);
 						}                 
 					}
