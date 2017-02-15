@@ -59,10 +59,13 @@ function ajaxCall(j,in2){
 					if(data.data.images_count == 1){
 						var temp = el[j];
 						temp.setAttribute("data-href-url",temp.getAttribute("data-href-url").replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, data.data.images[0].link));
+						temp.setAttribute("href",temp.getAttribute("data-href-url").replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, data.data.images[0].link));
 						//el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\/.*/, data.data.images[0].link);
 					}else{
 						var temp = el[j];
 						temp.setAttribute("data-href-url",temp.getAttribute("data-href-url").replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/"));
+
+						temp.setAttribute("href",temp.getAttribute("data-href-url").replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/"));
 						//el[j].href = el[j].href.replace(/(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/gallery\//, "https://imgur.com/a/");
 					}
 				} 
@@ -74,8 +77,9 @@ function ajaxCall(j,in2){
 					}
 					var temp = el[j];
 					temp.setAttribute("data-href-url",temp.getAttribute("data-href-url").replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, singularID));
+					temp.setAttribute("href",temp.getAttribute("data-href-url").replace(/(.*)?(http(s)?:\/\/)?(www\.)?(m\.)?imgur.com\/.*/, singularID));
 				}
-				temp.setAttribute("data-outbound-url",temp.getAttribute("data-href-url"));
+				temp.removeAttribute('data-outbound-url');
 
 			},
 			error: function(data){
